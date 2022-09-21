@@ -1,10 +1,22 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/login">login</router-link>
   </nav>
   <router-view/>
 </template>
+<script>
+export default {
+  name:'App',
+  created(){ 
+    // const api = `${process.env.VUE_APP_API}/api/${process.env.CUSTOM_PATH}/products`;
+    // const api = `${process.env.VUE_APP_API}/api/weiwei2022/products`;
+    //   this.$http.get(api).then((response) => {
+    //     console.log(response.data);
+    //   });
+  }
+}
+</script>
 
 <style>
 #app {

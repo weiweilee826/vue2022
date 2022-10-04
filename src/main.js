@@ -40,4 +40,4 @@ const app = createApp(App);
       });
     }
   });
-
+axios.defaults.withCredentials = true;

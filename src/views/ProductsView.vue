@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading v-model:active="isLoading" />
     <div class="text-end">
       <button class="btn btn-primary" @click="openModal(true)">
         建立新的產品
@@ -78,7 +79,6 @@
                 <div class="form-group">
                   <label for="customFile"
                     >或 上傳圖片
-
                   </label>
                   <input
                     type="file"
@@ -265,8 +265,7 @@ export default {
       tempProduct: {},
       myModal: {},
       isNew: false,
-
-
+      isLoading: false,
     };
   },
   methods: {
@@ -315,7 +314,6 @@ export default {
       const formData = new FormData();
       formData.append("file-to-uploadedFile", this.$refs.files.files[0]);
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/upload`;
-
       this.$http
         .post(url, formData, {
           headers: {
@@ -324,7 +322,6 @@ export default {
         })
         .then((response) => {
           if (response.data.success) {
-
             vm.tempProduct.imageUrl = response.data.imageUrl;
             // vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
           }

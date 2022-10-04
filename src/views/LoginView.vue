@@ -51,6 +51,8 @@ export default {
       const vm = this;
       this.$http.post(api, vm.user).then((response) => {
         if (response.data.success) {
+          const { token, expired } = response.data;
+          document.cookie = `hexToken=${token}; expires=${expired}`;
           vm.$router.push('/admin/products');
         }
       });

@@ -334,6 +334,15 @@ export default {
   mounted() {
     this.myModal = new Modal("#productModal", {});
   },
-
+  created() {
+    const token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (token !== "") {
+      this.axios.defaults.headers.common["Authorization"] = token;
+      this.getProducts();
+    }
+  },
 };
 </script>

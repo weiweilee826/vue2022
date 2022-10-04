@@ -47,13 +47,14 @@ export default {
   },
   methods: {
     signin() {
-      const api = `${process.env.VUE_APP_API}/signin`;
+      const api = `${process.env.VUE_APP_API}/admin/signin`;
       const vm = this;
       this.$http.post(api, vm.user).then((response) => {
         if (response.data.success) {
-          vm.$router.push('/');
+          vm.$router.push('/admin/products');
         }
       });
+
     },
   },
 };

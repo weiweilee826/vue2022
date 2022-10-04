@@ -12,6 +12,12 @@ import VueAxios from "vue-axios";
 
 import VueLoading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+library.add(faSpinner)
+
 const app = createApp(App);
   app.use(router)
   .use(BootstrapVue3)
@@ -19,6 +25,8 @@ const app = createApp(App);
   .provide('axios', app.config.globalProperties.axios)
   // .use(VueLoading)
   .component('Loading',VueLoading)
+  .component('font-awesome-icon', FontAwesomeIcon)
+
   .mount("#app");
 
   router.beforeEach((to, from) => {

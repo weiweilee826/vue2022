@@ -79,6 +79,10 @@
                 <div class="form-group">
                   <label for="customFile"
                     >或 上傳圖片
+                    <font-awesome-icon
+                      icon="fa-solid fa-spinner"
+                      v-if="status.fileUploading"
+                    />
                   </label>
                   <input
                     type="file"
@@ -266,6 +270,9 @@ export default {
       myModal: {},
       isNew: false,
       isLoading: false,
+      status: {
+        fileUploading: false,
+      },
     };
   },
   methods: {
@@ -310,10 +317,12 @@ export default {
       });
     },
     uploadFile() {
+      console.log("111", this);
       const vm = this;
       const formData = new FormData();
       formData.append("file-to-uploadedFile", this.$refs.files.files[0]);
       const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/admin/upload`;
+      vm.status.fileUploading = true;
       this.$http
         .post(url, formData, {
           headers: {
@@ -322,6 +331,7 @@ export default {
         })
         .then((response) => {
           if (response.data.success) {
+            vm.status.fileUploading = false;
             vm.tempProduct.imageUrl = response.data.imageUrl;
             // vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
           }

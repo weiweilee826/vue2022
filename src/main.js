@@ -18,6 +18,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 library.add(faSpinner)
 
+import mitt from "mitt";
+
 const app = createApp(App);
   app.use(router)
   .use(BootstrapVue3)
@@ -26,7 +28,6 @@ const app = createApp(App);
   // .use(VueLoading)
   .component('Loading',VueLoading)
   .component('font-awesome-icon', FontAwesomeIcon)
-
   .mount("#app");
 
   router.beforeEach((to, from) => {
@@ -41,3 +42,5 @@ const app = createApp(App);
     }
   });
 axios.defaults.withCredentials = true;
+
+app.config.globalProperties.$mybus = mitt();

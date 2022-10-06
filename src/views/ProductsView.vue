@@ -317,7 +317,6 @@ export default {
       });
     },
     uploadFile() {
-      console.log("111", this);
       const vm = this;
       const formData = new FormData();
       formData.append("file-to-uploadedFile", this.$refs.files.files[0]);
@@ -334,6 +333,11 @@ export default {
             vm.status.fileUploading = false;
             vm.tempProduct.imageUrl = response.data.imageUrl;
             // vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
+          } else {
+            this.$mybus.emit("message:push", {
+              message: response.data.message,
+              status: "danger",
+            });
           }
         });
     },

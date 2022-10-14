@@ -329,9 +329,11 @@ export default {
       const vm = this;
       vm.isLoading = true;
       this.$http.get(api).then((response) => {
-        vm.isLoading = false;
-        vm.products = response.data.products;
-        vm.pagination = response.data.pagination;
+        if (response.data.success) {
+          vm.isLoading = false;
+          vm.products = response.data.products;
+          vm.pagination = response.data.pagination;
+        }
       });
     },
     openModal(isNew, item) {

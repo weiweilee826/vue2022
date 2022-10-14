@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import DashboardView from "../views/DashboardView.vue";
 
 const routes = [
   {
@@ -17,13 +18,24 @@ const routes = [
   {
     path: "/admin",
     name: "dashboard",
-    component: () => import("../views/DashboardView.vue"),
+    component: DashboardView,
     children: [
       {
         path: "products",
         name: "products",
         component: () => import("../views/ProductsView.vue"),
         meta: { requiresAuth: true },
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: DashboardView,
+    children: [
+      {
+        path: "customer_order",
+        name: "customerOrder",
+        component: () => import("../views/CustomerOrder.vue"),
       },
     ],
   },

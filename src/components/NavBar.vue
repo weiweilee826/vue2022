@@ -10,7 +10,7 @@
       />
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#" @click.prevent="signout">Sign out</a>
+          <router-link to="/customer_order">Sign out</router-link>
         </li>
       </ul>
     </nav>

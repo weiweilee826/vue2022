@@ -4,14 +4,14 @@
     <div class="row mt-4">
       <div class="col-md-4 mb-4" v-for="item in products" :key="item.id">
         <div class="card border-0 shadow-sm">
-          <!-- <div
+          <div
             style="
               height: 150px;
               background-size: cover;
               background-position: center;
             "
             :style="{ backgroundImage: `url(${item.imageUrl})` }"
-          ></div> -->
+          ></div>
           <div class="card-body">
             <span class="badge badge-secondary float-right ml-2">{{
               item.category
@@ -33,12 +33,26 @@
             </div>
           </div>
           <div class="card-footer d-flex">
-            <button type="button" class="btn btn-outline-secondary btn-sm">
-              <i class="fas fa-spinner fa-spin"></i>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              @click="getProduct(item.id)"
+            >
+              <i
+                class="fas fa-spinner fa-spin"
+                v-if="status.loadingItem === item.id"
+              ></i>
               查看更多
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm ml-auto">
-              <i class="fas fa-spinner fa-spin"></i>
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm ml-auto"
+              @click="addtoCart(item.id)"
+            >
+              <i
+                class="fas fa-spinner fa-spin"
+                v-if="status.loadingItem === item.id"
+              ></i>
               加到購物車
             </button>
           </div>
@@ -53,6 +67,10 @@ export default {
   data() {
     return {
       products: [],
+      product: {},
+      status: {
+        loadingItem: "",
+      },
       isLoading: false,
     };
   },
@@ -64,6 +82,15 @@ export default {
       this.$http.get(url).then((response) => {
         vm.products = response.data.products;
         vm.isLoading = false;
+      });
+    },
+    getProduct(id) {
+      const vm = this;
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/product/${id}`;
+      vm.status.loadingItem = id;
+      this.$http.get(url).then((response) => {
+        vm.product = response.data.product;
+        vm.status.loadingItem = "";
       });
     },
   },

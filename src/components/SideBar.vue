@@ -11,10 +11,22 @@
       </h6>
       <ul class="nav flex-column mb-2">
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <router-link to="/admin/products">
             <span data-feather="file-text"></span>
             產品列表
-          </a>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/order_list">
+            <span data-feather="file-text"></span>
+            訂單列表
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/coupon">
+            <span data-feather="file-text"></span>
+            優惠券
+          </router-link>
         </li>
       </ul>
 

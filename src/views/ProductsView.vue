@@ -21,10 +21,15 @@
         <tr v-for="item in products" :key="item.id">
           <td>{{ item.category }}</td>
           <td>{{ item.title }}</td>
-          <td class="text-end">
+          <td class="text-end" v-if="item.origin_price !== undefined">
             {{ $filters.currencyUSD(item.origin_price) }}
           </td>
-          <td class="text-end">{{ $filters.currencyUSD(item.price) }}</td>
+          <td class="text-end" v-else>{{ $filters.currencyUSD(0) }}</td>
+
+          <td class="text-end" v-if="item.price !== undefined">
+            {{ $filters.currencyUSD(item.price) }}
+          </td>
+          <td class="text-end" v-else>{{ $filters.currencyUSD(0) }}</td>
           <td>
             <span v-if="item.is_enabled" class="text-success">啟用</span>
             <span v-else>未啟用</span>
@@ -258,6 +263,7 @@
         </div>
       </div>
     </div>
+    
     <div
       class="modal fade"
       id="delProductModal"
@@ -383,7 +389,7 @@ export default {
           if (response.data.success) {
             vm.status.fileUploading = false;
             vm.tempProduct.imageUrl = response.data.imageUrl;
-            // vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
+            vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
           } else {
             this.$mybus.emit("message:push", {
               message: response.data.message,

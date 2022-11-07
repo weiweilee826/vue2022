@@ -129,7 +129,108 @@
       </div>
     </div>
 
-  
+    <!-- 購物車 table -->
+    <div style="width: 40rem" class="mx-auto">
+      <table class="table mt-4">
+        <thead>
+          <tr>
+            <th></th>
+            <th>品名</th>
+            <th>數量</th>
+            <th>單價</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="item in carts" :key="item.id">
+            <td>
+              <button type="button" class="btn btn-outline-danger" @click="deleteCart(item.id)">
+                <font-awesome-icon icon="fa-solid fa-trash" />
+              </button>
+            </td>
+            <td>{{ item.product.title }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.product.price }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end">總計</td>
+            <td>{{  $filters.currencyUSD(countTotal) }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end">折扣價</td>
+            <td>{{ discount }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="請輸入優惠碼"
+          aria-describedby="button-addon2"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          id="button-addon2"
+        >
+          套用優惠券
+        </button>
+      </div>
+
+      <form class="text-start">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="InputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="請輸入email"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="inputName" class="form-label">收件人姓名</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputName"
+            placeholder="請輸入姓名"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="inputMobile" class="form-label">收件人電話</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputMobile"
+            placeholder="請輸入電話"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="inputAddress" class="form-label">收件人地址</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputAddress"
+            placeholder="請輸入地址"
+          />
+        </div>
+
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="floatingTextarea"
+          >
+          </textarea>
+          <label for="floatingTextarea">留言</label>
+        </div>
+      </form>
+      <button type="button" class="btn btn-danger text-end">送出訂單</button>
+    </div>
   </div>
 </template>
 
@@ -147,6 +248,7 @@ export default {
       },
       isLoading: false,
       carts: [],
+      discount: 0,
     };
   },
   methods: {
@@ -193,14 +295,29 @@ export default {
         vm.isLoading = false;
       });
     },
-   },
-    mounted() {
-      this.myModal = new Modal("#productModal", {});
+    deleteCart(id) {
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/cart/${id}`;
+      this.isLoading = true;
+      this.$http.delete(url).then(() => {
+        this.getCart();
+        this.isLoading = false;
+      });
     },
-    created() {
-      this.getProducts();
-      this.getCart();
+  },
+  computed: {
+    countTotal() {
+      return this.carts.reduce(function (sum, c) {
+
+        return sum + (c.qty*c.product.price);
+      }, 0);
     },
-  
+  },
+  mounted() {
+    this.myModal = new Modal("#productModal", {});
+  },
+  created() {
+    this.getProducts();
+    this.getCart();
+  },
 };
 </script>

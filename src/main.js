@@ -16,7 +16,8 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-library.add(faSpinner);
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+library.add(faSpinner,faTrash);
 
 import mitt from "mitt";
 
@@ -37,8 +38,8 @@ app.config.globalProperties.$filters = {
   },
 };
 
-router.beforeEach((to, from) => {
-  console.log("to", to, "from", from);
+router.beforeEach((to) => {
+  // console.log("to", to, "from", from);
   if (to.meta.requiresAuth) {
     const api = `${process.env.VUE_APP_API}/api/user/check`;
     axios.post(api).then((response) => {

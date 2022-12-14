@@ -36,6 +36,9 @@ app.config.globalProperties.$filters = {
   currencyUSD(value) {
     return "$" + value;
   },
+  timestampToDate(t) {
+    return new Date(t).toLocaleDateString('fr-ca');
+  },
 };
 
 router.beforeEach((to) => {

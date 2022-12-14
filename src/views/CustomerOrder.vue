@@ -144,7 +144,11 @@
         <tbody>
           <tr v-for="item in carts" :key="item.id">
             <td>
-              <button type="button" class="btn btn-outline-danger" @click="deleteCart(item.id)">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                @click="deleteCart(item.id)"
+              >
                 <font-awesome-icon icon="fa-solid fa-trash" />
               </button>
             </td>
@@ -154,11 +158,11 @@
           </tr>
           <tr>
             <td colspan="3" class="text-end">總計</td>
-            <td>{{  $filters.currencyUSD(countTotal) }}</td>
+            <td>{{ $filters.currencyUSD(countTotal) }}</td>
           </tr>
           <tr>
             <td colspan="3" class="text-end">折扣價</td>
-            <td>{{ discount }}</td>
+            <td>{{ $filters.currencyUSD(discount) }}</td>
           </tr>
         </tbody>
       </table>
@@ -169,11 +173,13 @@
           class="form-control"
           placeholder="請輸入優惠碼"
           aria-describedby="button-addon2"
+          v-model="couponCode.data.code"
         />
         <button
           class="btn btn-outline-secondary"
           type="button"
           id="button-addon2"
+          @click="useCoupon"
         >
           套用優惠券
         </button>
@@ -188,6 +194,7 @@
             id="InputEmail1"
             aria-describedby="emailHelp"
             placeholder="請輸入email"
+            v-model="customrInfo.data.user.email"
           />
         </div>
         <div class="mb-3">
@@ -197,6 +204,7 @@
             class="form-control"
             id="inputName"
             placeholder="請輸入姓名"
+            v-model="customrInfo.data.user.name"
           />
         </div>
         <div class="mb-3">
@@ -206,6 +214,7 @@
             class="form-control"
             id="inputMobile"
             placeholder="請輸入電話"
+            v-model="customrInfo.data.user.tel"
           />
         </div>
 
@@ -216,6 +225,7 @@
             class="form-control"
             id="inputAddress"
             placeholder="請輸入地址"
+            v-model="customrInfo.data.user.address"
           />
         </div>
 
@@ -224,12 +234,15 @@
             class="form-control"
             placeholder="Leave a comment here"
             id="floatingTextarea"
+            v-model="customrInfo.data.message"
           >
           </textarea>
           <label for="floatingTextarea">留言</label>
         </div>
       </form>
-      <button type="button" class="btn btn-danger text-end">送出訂單</button>
+      <button type="button" class="btn btn-danger text-end" @click="sendOrder">
+        送出訂單
+      </button>
     </div>
   </div>
 </template>
@@ -249,6 +262,22 @@ export default {
       isLoading: false,
       carts: [],
       discount: 0,
+      customrInfo: {
+        data: {
+          user: {
+            name: "test",
+            email: "test@gmail.com",
+            tel: "0912346768",
+            address: "kaohsiung",
+          },
+          message: "123",
+        },
+      },
+      couponCode: {
+        data: {
+          code: "",
+        },
+      },
     };
   },
   methods: {
@@ -280,7 +309,7 @@ export default {
         qty,
       };
       this.$http.post(url, { data: cart }).then((response) => {
-        console.log("x", response);
+        console.log("a", response);
         vm.status.loadingItem = "";
         vm.getCart();
         this.myModal.hide();
@@ -303,12 +332,26 @@ export default {
         this.isLoading = false;
       });
     },
+    sendOrder() {
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/order`;
+      this.$http.post(url, this.customrInfo).then((response) => {
+        console.log("b", response);
+        this.myModal.hide();
+      });
+    },
+    useCoupon() {
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_CUSTOM_PATH}/coupon`;
+      this.$http.post(url, this.couponCode).then((response) => {
+        console.log("123", response);
+        this.discount = response.data.data.final_total;
+        this.myModal.hide();
+      });
+    },
   },
   computed: {
     countTotal() {
       return this.carts.reduce(function (sum, c) {
-
-        return sum + (c.qty*c.product.price);
+        return sum + c.qty * c.product.price;
       }, 0);
     },
   },

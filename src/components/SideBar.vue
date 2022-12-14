@@ -23,7 +23,7 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/admin/coupon">
+          <router-link to="/admin/coupons">
             <span data-feather="file-text"></span>
             優惠券
           </router-link>
